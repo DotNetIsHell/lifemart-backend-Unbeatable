@@ -1,3 +1,5 @@
-# lifemart-backend-Unbeatable
-Project for university
-Care service for Life Mart cafe
+![Alt text](https://lifemart.ru/_nuxt/img/logo.73c776f.svg)
+
+# Служба Заботы
+
+Сервис "Служба Заботы" в рамках "Проектного Практикума" для компании "Жизнь Март"

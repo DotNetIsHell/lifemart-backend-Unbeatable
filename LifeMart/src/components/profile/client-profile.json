@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_profile_client_profiles",
+  "info": {
+    "displayName": "clientProfile",
+    "icon": "user"
+  },
+  "options": {},
+  "attributes": {
+    "address": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    },
+    "telegram": {
+      "type": "string"
+    },
+    "avatar": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    }
+  }
+}

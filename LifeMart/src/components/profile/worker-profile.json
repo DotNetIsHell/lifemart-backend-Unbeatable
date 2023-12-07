@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_profile_worker_profiles",
+  "info": {
+    "displayName": "workerProfile",
+    "icon": "emotionHappy"
+  },
+  "options": {},
+  "attributes": {
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "avatar": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

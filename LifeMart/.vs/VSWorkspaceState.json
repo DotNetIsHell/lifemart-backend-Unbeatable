@@ -1,17 +1,6 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\.strapi\\client",
-    "\\src\\api",
-    "\\src\\api\\message",
-    "\\src\\api\\message\\content-types",
-    "\\src\\api\\message\\content-types\\message",
-    "\\src\\api\\message\\controllers",
-    "\\src\\api\\message\\routes",
-    "\\src\\api\\message\\services",
-    "\\src\\api\\request\\content-types",
-    "\\src\\api\\request\\content-types\\request"
+    ""
   ],
-  "SelectedNode": "\\config",
   "PreviewInSolutionExplorer": false
 }

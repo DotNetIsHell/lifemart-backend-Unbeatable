@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_profile_admin_profiles",
+  "info": {
+    "displayName": "adminProfile",
+    "icon": "crown"
+  },
+  "options": {},
+  "attributes": {
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "avatar": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

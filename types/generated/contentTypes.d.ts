@@ -416,7 +416,8 @@ export interface ApiRequestRequest extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    status: Attribute.Enumeration<['active', 'finished', 'unassign']>;
+    status: Attribute.Enumeration<['active', 'finished']> &
+      Attribute.DefaultTo<'active'>;
     userFrom: Attribute.Relation<
       'api::request.request',
       'oneToOne',

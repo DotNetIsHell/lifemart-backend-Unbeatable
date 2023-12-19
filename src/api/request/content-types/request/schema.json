@@ -16,9 +16,9 @@
       "type": "enumeration",
       "enum": [
         "active",
-        "finished",
-        "unassign"
-      ]
+        "finished"
+      ],
+      "default": "active"
     },
     "userFrom": {
       "type": "relation",

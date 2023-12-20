@@ -54,7 +54,9 @@ module.exports = {
             },
           });
 
-          if (!group && message) {
+          if (!group) {
+            if (!message) return;
+
             group = await strapi.db.query("api::request.request").create({
               data: {
                 userFrom: userId,

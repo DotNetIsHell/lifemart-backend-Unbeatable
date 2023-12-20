@@ -43,7 +43,6 @@ module.exports = {
 
         if (user.role.type === "authenticated") {
           const message = data.message;
-          if (!message) return;
 
           let group = await strapi.db.query("api::request.request").findOne({
             where: {
@@ -55,7 +54,7 @@ module.exports = {
             },
           });
 
-          if (!group) {
+          if (!group && message) {
             group = await strapi.db.query("api::request.request").create({
               data: {
                 userFrom: userId,

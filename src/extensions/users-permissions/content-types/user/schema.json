@@ -72,6 +72,11 @@
         "profile.admin-profile",
         "profile.worker-profile"
       ]
+    },
+    "requests": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::request.request"
     }
   }
 }

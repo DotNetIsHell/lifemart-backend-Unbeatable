@@ -362,36 +362,6 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiAnalyticAnalytic extends Schema.SingleType {
-  collectionName: 'analytics';
-  info: {
-    singularName: 'analytic';
-    pluralName: 'analytics';
-    displayName: 'analytic';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::analytic.analytic',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::analytic.analytic',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface ApiMessageMessage extends Schema.CollectionType {
   collectionName: 'messages';
   info: {
@@ -785,6 +755,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
         'profile.worker-profile'
       ]
     >;
+    requests: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::request.request'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -812,7 +787,6 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'api::analytic.analytic': ApiAnalyticAnalytic;
       'api::message.message': ApiMessageMessage;
       'api::request.request': ApiRequestRequest;
       'plugin::upload.file': PluginUploadFile;

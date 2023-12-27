@@ -1,9 +1,9 @@
-'use strict';
-
-/**
- * analytic router
- */
-
-const { createCoreRouter } = require('@strapi/strapi').factories;
-
-module.exports = createCoreRouter('api::analytic.analytic');
+module.exports = {
+  routes: [
+    {
+      method: "GET",
+      path: "/analytic",
+      handler: "analytic.getUserAnalytic",
+    },
+  ],
+};

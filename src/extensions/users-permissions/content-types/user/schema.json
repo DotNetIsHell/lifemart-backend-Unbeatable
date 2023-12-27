@@ -71,12 +71,28 @@
         "profile.client-profile",
         "profile.admin-profile",
         "profile.worker-profile"
-      ]
+      ],
+      "max": 1,
+      "min": 1
     },
     "requests": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::request.request"
+      "target": "api::request.request",
+      "mappedBy": "userFrom"
+    },
+    "workRequests": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::request.request",
+      "mappedBy": "userWorker"
+    },
+    "avatar": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
     }
   }
 }

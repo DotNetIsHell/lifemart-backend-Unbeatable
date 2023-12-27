@@ -16,19 +16,21 @@
       "type": "enumeration",
       "enum": [
         "active",
-        "finished"
+        "completed"
       ],
       "default": "active"
     },
     "userFrom": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "plugin::users-permissions.user"
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "requests"
     },
     "userWorker": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "plugin::users-permissions.user"
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "workRequests"
     },
     "messages": {
       "type": "relation",

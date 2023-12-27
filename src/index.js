@@ -2,6 +2,17 @@
 "use strict";
 const { jwtDecode } = require("jwt-decode");
 
+const ROLES = {
+  ADMIN: "admin",
+  AUTHENTICATED: "authenticated",
+  WORKER: "worker",
+  GUEST: "guest",
+};
+
+const SOCKET_ROOMS = {
+  WORKERS: "workers",
+};
+
 module.exports = {
   /**
    * An asynchronous register function that runs before
@@ -21,18 +32,21 @@ module.exports = {
   bootstrap({ strapi }) {
     const getSocketUser = async (query) => {
       if (!query || !query.jwt) return null;
-      const { id } = jwtDecode(query.jwt);
+      try {
+        const { id } = jwtDecode(query.jwt);
 
-      const user = await strapi.db
-        .query("plugin::users-permissions.user")
-        .findOne({
-          where: { id },
-          populate: {
-            role: true,
-          },
-        });
-
-      return user;
+        const user = await strapi.db
+          .query("plugin::users-permissions.user")
+          .findOne({
+            where: { id },
+            populate: {
+              role: true,
+            },
+          });
+        return user;
+      } catch (e) {
+        return null;
+      }
     };
 
     var io = require("socket.io")(strapi.server.httpServer, {
@@ -50,13 +64,39 @@ module.exports = {
 
       console.log("USER AUTHORIZED", user.username);
 
-      socket.on("message", async (data) => {
-        if (!data.text) return;
+      socket.on("completeRequest", async () => {
+        if (user.role.type !== ROLES.WORKER) return;
+        const request = await strapi.db.query("api::request.request").findOne({
+          where: {
+            status: "active",
+            userWorker: user.id,
+          },
+        });
+
+        if (!request) return;
+
+        await strapi.db
+          .query("api::request.request")
+          .update({ where: { id: request.id }, data: { status: "completed" } });
+
+        io.to(request.id).emit("requestCompleted");
+        io.in(request.id).socketsLeave(request.id);
+      });
+
+      socket.on("message", async (data = {}) => {
+        if (!data.text && !data.file) return;
 
         const request = await strapi.db.query("api::request.request").findOne({
           where: {
             status: "active",
-            userFrom: user.id,
+            $or: [
+              {
+                userFrom: user.id,
+              },
+              {
+                userWorker: user.id,
+              },
+            ],
             publishedAt: {
               $notNull: true,
             },
@@ -65,22 +105,27 @@ module.exports = {
 
         if (!request) return;
 
+        const messageData = {};
+
+        if (data.text) messageData.text = data.text;
+        if (data.file) messageData.file = data.file;
+
         strapi.db.query("api::message.message").create({
           data: {
-            text: data.text,
+            ...messageData,
             userFrom: user.id,
             publishedAt: new Date(),
             request: request.id,
           },
         });
 
+        //io.to(SOCKET_ROOMS.WORKERS).emit("newMessage");
         io.to(request.id).emit("newMessage");
       });
 
-      socket.on("join", async (data) => {
-        console.log("JOIN", data);
-        if (user.role.type === "authenticated") {
-          const message = data?.message;
+      socket.on("join", async (data = {}) => {
+        if (user.role.type === ROLES.AUTHENTICATED) {
+          const message = data.message;
 
           let request = await strapi.db.query("api::request.request").findOne({
             where: {
@@ -102,8 +147,6 @@ module.exports = {
               },
             });
 
-            socket.join(request.id);
-
             await strapi.db.query("api::message.message").create({
               data: {
                 text: message,
@@ -113,20 +156,35 @@ module.exports = {
               },
             });
 
+            await strapi.service("api::request.request").addWorkerToRequest();
+
+            request = await strapi.db.query("api::request.request").findOne({
+              where: {
+                id: request.id,
+              },
+              populate: {
+                userWorker: true,
+              },
+            });
+
+            io.to(request.userWorker.id).emit("newRequest");
+          }
+
+          socket.join(request.id);
+
+          if (message) {
             io.to(request.id).emit("newMessage");
-          } else {
-            socket.join(request.id);
           }
         }
 
-        if (user.role.type === "worker" && data.requestId) {
-          const requestId = data.requestId;
+        if (user.role.type === ROLES.WORKER) {
+          socket.join(user.id);
 
           const request = await strapi.db
             .query("api::request.request")
             .findOne({
               where: {
-                id: requestId,
+                userWorker: user.id,
                 status: "active",
                 publishedAt: {
                   $notNull: true,
@@ -136,14 +194,7 @@ module.exports = {
 
           if (!request) return;
 
-          await strapi.db.query("api::request.request").update({
-            where: { id: requestId },
-            data: {
-              userWorker: user.id,
-            },
-          });
-
-          socket.join(requestId);
+          socket.join(request.id);
         }
       });
     });

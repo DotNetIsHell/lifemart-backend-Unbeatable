@@ -2,7 +2,8 @@
   "collectionName": "components_profile_worker_profiles",
   "info": {
     "displayName": "workerProfile",
-    "icon": "emotionHappy"
+    "icon": "emotionHappy",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -13,11 +14,16 @@
       "type": "string"
     },
     "avatar": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

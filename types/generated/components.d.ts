@@ -34,11 +34,13 @@ export interface ProfileWorkerProfile extends Schema.Component {
   info: {
     displayName: 'workerProfile';
     icon: 'emotionHappy';
+    description: '';
   };
   attributes: {
     firstName: Attribute.String;
     lastName: Attribute.String;
     avatar: Attribute.Media;
+    isActive: Attribute.Boolean & Attribute.DefaultTo<false>;
   };
 }
 

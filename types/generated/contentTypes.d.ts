@@ -446,16 +446,16 @@ export interface ApiRequestRequest extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    status: Attribute.Enumeration<['active', 'finished']> &
+    status: Attribute.Enumeration<['active', 'completed']> &
       Attribute.DefaultTo<'active'>;
     userFrom: Attribute.Relation<
       'api::request.request',
-      'oneToOne',
+      'manyToOne',
       'plugin::users-permissions.user'
     >;
     userWorker: Attribute.Relation<
       'api::request.request',
-      'oneToOne',
+      'manyToOne',
       'plugin::users-permissions.user'
     >;
     messages: Attribute.Relation<
@@ -784,7 +784,22 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
         'profile.admin-profile',
         'profile.worker-profile'
       ]
+    > &
+      Attribute.SetMinMax<{
+        min: 1;
+        max: 1;
+      }>;
+    requests: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::request.request'
     >;
+    workRequests: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::request.request'
+    >;
+    avatar: Attribute.Media;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

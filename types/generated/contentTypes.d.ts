@@ -420,12 +420,12 @@ export interface ApiRequestRequest extends Schema.CollectionType {
       Attribute.DefaultTo<'active'>;
     userFrom: Attribute.Relation<
       'api::request.request',
-      'oneToOne',
+      'manyToOne',
       'plugin::users-permissions.user'
     >;
     userWorker: Attribute.Relation<
       'api::request.request',
-      'oneToOne',
+      'manyToOne',
       'plugin::users-permissions.user'
     >;
     messages: Attribute.Relation<
@@ -756,6 +756,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       ]
     >;
     requests: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::request.request'
+    >;
+    workRequests: Attribute.Relation<
       'plugin::users-permissions.user',
       'oneToMany',
       'api::request.request'

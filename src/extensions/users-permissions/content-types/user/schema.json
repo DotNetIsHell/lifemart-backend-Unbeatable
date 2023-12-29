@@ -76,7 +76,14 @@
     "requests": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::request.request"
+      "target": "api::request.request",
+      "mappedBy": "userFrom"
+    },
+    "workRequests": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::request.request",
+      "mappedBy": "userWorker"
     }
   }
 }
